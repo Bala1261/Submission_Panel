@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEXO Challengers Round 2 | Submission Portal</title>
+<meta name="description" content="Official Round 2 submission portal for BEXO Challengers contest — Ace Digital.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-deep:#00072D;
+  --bg-primary:#051650;
+  --bg-card:#0A2472;
+  --bg-card2:#0d2a85;
+  --bg-hover:#123499;
+  --accent:#1A438F;
+  --accent2:#2a5bbd;
+  --accent-bright:#3b7df8;
+  --accent-dim:rgba(26,67,143,.22);
+  --accent-glow:rgba(26,67,143,.4);
+  --border:#0d2a85;
+  --border2:#123499;
+  --txt:#e8edf5;
+  --txt2:#a8bfe8;
+  --txt3:#5a7ab8;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --purple:#a78bfa;
+  --r:12px;--r2:16px;--r3:8px;
+  --sh:0 4px 24px rgba(0,0,20,.6);
+  --sh2:0 8px 48px rgba(0,0,0,.8);
+  --tr:.18s ease;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg-deep);color:var(--txt);min-height:100vh;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 10%,rgba(26,67,143,.28) 0%,transparent 50%),radial-gradient(ellipse at 80% 85%,rgba(5,22,80,.5) 0%,transparent 55%),radial-gradient(ellipse at 50% 50%,rgba(10,36,114,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg-primary)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.page{display:none;min-height:100vh;position:relative;z-index:1;flex-direction:column}
+.page.active{display:flex}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:var(--r3);border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all var(--tr);text-decoration:none;white-space:nowrap;min-height:42px;-webkit-tap-highlight-color:transparent}
+.btn-primary{background:linear-gradient(135deg,#1A438F,#2a5bbd);color:#fff;box-shadow:0 2px 12px rgba(26,67,143,.4)}.btn-primary:hover{background:linear-gradient(135deg,#2a5bbd,#3b7df8);transform:translateY(-1px);box-shadow:0 6px 22px rgba(26,67,143,.55)}.btn-primary:active{transform:translateY(0)}
+.btn-secondary{background:rgba(10,36,114,.6);color:var(--txt);border:1px solid var(--border2);backdrop-filter:blur(8px)}.btn-secondary:hover{border-color:var(--accent-bright);color:#fff;background:rgba(18,52,153,.7)}
+.btn-outline{background:transparent;color:var(--accent-bright);border:1px solid var(--accent-bright)}.btn-outline:hover{background:var(--accent-dim)}
+.btn-green{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}.btn-green:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(34,197,94,.35)}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:#dc2626}
+.btn-sm{padding:7px 14px;font-size:12px;min-height:36px}.btn-lg{padding:14px 28px;font-size:15px;font-weight:700;min-height:50px}.btn-full{width:100%;justify-content:center}
+/* Forms */
+.fg{margin-bottom:18px}
+.fl{display:block;font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:7px;text-transform:uppercase;letter-spacing:.6px}
+.fc{width:100%;padding:12px 15px;background:rgba(0,7,45,.7);border:1px solid var(--border2);border-radius:var(--r3);color:var(--txt);font-family:'Inter',sans-serif;font-size:16px;transition:all var(--tr);outline:none;-webkit-appearance:none;appearance:none}
+.fc:focus{border-color:var(--accent-bright);box-shadow:0 0 0 3px rgba(59,125,248,.2);background:rgba(0,7,45,.9)}
+.fc::placeholder{color:var(--txt3)}
+textarea.fc{resize:vertical;min-height:90px;font-size:14px;line-height:1.6}
+select.fc{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235a7ab8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-color:rgba(0,7,45,.7);padding-right:38px;cursor:pointer}
+select.fc option{background:#051650}
+.fhint{font-size:11px;color:var(--txt3);margin-top:4px}
+.ferr{font-size:12px;color:var(--red);margin-top:4px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fgrid .full{grid-column:1/-1}
+/* Password toggle */
+.pw-wrap{position:relative}.pw-wrap .fc{padding-right:46px}
+.pw-toggle{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--txt3);cursor:pointer;font-size:15px;transition:color var(--tr);padding:4px;-webkit-tap-highlight-color:transparent}.pw-toggle:hover{color:var(--txt)}
+/* Card */
+.card{background:linear-gradient(145deg,rgba(10,36,114,.65),rgba(5,22,80,.75));border:1px solid var(--border2);border-radius:var(--r);padding:22px;backdrop-filter:blur(10px)}
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.b-pending{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.b-reviewed{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.b-shortlisted{background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.3)}
+.b-late{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.b-ontime{background:rgba(34,197,94,.08);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+/* Toast */
+#toast-wrap{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:calc(100vw - 32px)}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(135deg,rgba(10,36,114,.96),rgba(5,22,80,.98));border:1px solid var(--border2);border-radius:var(--r);box-shadow:var(--sh2);font-size:13px;min-width:240px;max-width:340px;animation:sIn .3s ease;backdrop-filter:blur(16px)}
+.t-success{border-left:3px solid var(--green)}.t-error{border-left:3px solid var(--red)}.t-info{border-left:3px solid var(--accent-bright)}
+.t-success i{color:var(--green)}.t-error i{color:var(--red)}.t-info i{color:var(--accent-bright)}
+@keyframes sIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes sOut{from{transform:translateX(0);opacity:1}to{transform:translateX(110%);opacity:0}}
+/* Navbar */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:linear-gradient(135deg,rgba(0,7,45,.97),rgba(5,22,80,.92));backdrop-filter:blur(16px);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:100;min-height:56px}
+.nav-brand{display:flex;align-items:center;gap:10px;min-width:0}
+.nav-logo{width:36px;height:36px;background:linear-gradient(135deg,#051650,#1A438F);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;letter-spacing:-1px;flex-shrink:0;box-shadow:0 2px 10px rgba(26,67,143,.5)}
+.nav-logo.admin{background:linear-gradient(135deg,#5b21b6,var(--purple))}
+.nav-name{font-size:14px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-sub{font-size:10px;color:var(--txt3)}
+.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+/* Loading */
+#loading{position:fixed;inset:0;background:rgba(0,7,45,.85);display:none;align-items:center;justify-content:center;z-index:9998;backdrop-filter:blur(4px)}
+.spin{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent-bright);border-radius:50%;animation:rot .7s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+/* Checkbox */
+.cbwrap{display:flex;align-items:flex-start;gap:12px;padding:14px;background:rgba(26,67,143,.1);border:1px solid var(--border2);border-radius:var(--r3);cursor:pointer}
+.cbwrap input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent-bright);cursor:pointer;flex-shrink:0;margin-top:2px}
+.cbwrap label{font-size:13px;color:var(--txt2);cursor:pointer;line-height:1.5}
+.cbwrap label strong{color:var(--txt)}
+/* Word count */
+.wc{font-size:11px;color:var(--txt3);text-align:right;margin-top:3px}
+/* ======= LOGIN ======= */
+#page-login{align-items:center;justify-content:center;padding:20px;min-height:100vh}
+.l-wrap{width:100%;max-width:420px}
+.l-header{text-align:center;margin-bottom:30px}
+.l-logo{width:72px;height:72px;background:linear-gradient(135deg,#051650,#1A438F,#2a5bbd);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;margin:0 auto 16px;box-shadow:0 8px 32px rgba(26,67,143,.5);letter-spacing:-2px}
+.l-title{font-size:26px;font-weight:900;background:linear-gradient(135deg,#fff 30%,#5b9cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;letter-spacing:-.5px}
+.l-sub{font-size:13px;color:var(--txt3)}
+.l-card{background:linear-gradient(145deg,rgba(10,36,114,.6),rgba(5,22,80,.75));border:1px solid var(--border2);border-radius:var(--r2);padding:28px;box-shadow:var(--sh2);backdrop-filter:blur(16px)}
+.l-card h2{font-size:17px;font-weight:600;margin-bottom:22px;color:var(--txt)}
+.l-info{margin-top:18px;padding:12px 14px;background:rgba(26,67,143,.1);border:1px solid rgba(59,125,248,.2);border-radius:var(--r3);font-size:12px;color:var(--txt3);text-align:center;line-height:1.7}
+/* ======= PAGE CONTENT ======= */
+.pcontent{max-width:860px;margin:0 auto;padding:28px 16px;width:100%}
+.pcontent-wide{max-width:1180px;margin:0 auto;padding:28px 16px;width:100%}
+.phead{margin-bottom:24px}
+.phead h1{font-size:24px;margin-bottom:5px;background:linear-gradient(135deg,#fff,var(--txt2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.phead p{color:var(--txt2);font-size:14px}
+/* Avatar */
+.avatar{background:linear-gradient(135deg,#051650,#1A438F);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex-shrink:0}
+/* ======= SUBMISSIONS ======= */
+.sub-item{background:linear-gradient(145deg,rgba(10,36,114,.5),rgba(5,22,80,.65));border:1px solid var(--border2);border-radius:var(--r);margin-bottom:12px;overflow:hidden;transition:all var(--tr);backdrop-filter:blur(8px)}
+.sub-item:hover{border-color:rgba(59,125,248,.5);box-shadow:0 4px 20px rgba(26,67,143,.25)}
+.sub-hdr{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;cursor:pointer;gap:10px;-webkit-tap-highlight-color:transparent}
+.sub-title{font-size:14px;font-weight:600;margin-bottom:3px;line-height:1.4}
+.sub-meta{font-size:11px;color:var(--txt3)}
+.sub-body{padding:0 16px 16px;display:none;border-top:1px solid var(--border2)}
+.sub-body.open{display:block}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.detail-grid .full{grid-column:1/-1}
+.dlabel{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--txt3);font-weight:700;margin-bottom:4px}
+.dval{font-size:13px;color:var(--txt);line-height:1.6}
+.nf-box{background:linear-gradient(145deg,rgba(10,36,114,.55),rgba(5,22,80,.65));border:1px solid var(--border2);border-radius:var(--r);padding:22px;margin-top:24px;backdrop-filter:blur(8px)}
+.nf-box h3{font-size:18px;font-weight:700;margin-bottom:20px;background:linear-gradient(135deg,#fff,var(--txt2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+/* Section title */
+.stitle{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--txt)}
+.stitle::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border2),transparent)}
+/* ======= SUCCESS ======= */
+#page-success{align-items:center;justify-content:center;padding:40px 20px}
+.suc-wrap{max-width:520px;width:100%;text-align:center}
+.suc-icon{width:82px;height:82px;background:rgba(34,197,94,.12);border:2px solid var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;color:var(--green);margin:0 auto 22px;animation:pop .5s ease}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.suc-title{font-size:30px;font-weight:800;color:var(--green);margin-bottom:10px}
+.suc-sub{font-size:15px;color:var(--txt2);margin-bottom:30px;line-height:1.7}
+.suc-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* ======= ADMIN DASHBOARD ======= */
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.scard{background:linear-gradient(145deg,rgba(10,36,114,.6),rgba(5,22,80,.7));border:1px solid var(--border2);border-radius:var(--r);padding:16px 18px;transition:all var(--tr);backdrop-filter:blur(8px)}
+.scard:hover{border-color:var(--accent-bright);transform:translateY(-2px);box-shadow:0 6px 24px rgba(26,67,143,.3)}
+.scard-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--txt3);margin-bottom:8px}
+.scard-val{font-size:32px;font-weight:900;line-height:1;margin-bottom:3px}
+.scard-sub{font-size:11px;color:var(--txt3)}
+.scard.c-accent .scard-val{color:#5b9cff}
+.scard.c-green .scard-val{color:var(--green)}
+.scard.c-amber .scard-val{color:var(--amber)}
+.scard.c-purple .scard-val{color:var(--purple)}
+/* Deadline banner */
+.dl-banner{background:linear-gradient(135deg,rgba(26,67,143,.18),rgba(10,36,114,.28));border:1px solid rgba(59,125,248,.3);border-radius:var(--r);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.dl-label{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--txt3);margin-bottom:4px;font-weight:600}
+.dl-date{font-size:17px;font-weight:700;color:var(--txt)}
+.cd{display:flex;gap:10px}
+.cd-item{text-align:center;background:rgba(0,7,45,.5);border-radius:8px;padding:8px 10px;min-width:44px}
+.cd-val{font-size:22px;font-weight:900;color:#5b9cff;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.cd-lbl{font-size:8px;text-transform:uppercase;color:var(--txt3);letter-spacing:.5px}
+/* Admin toolbar */
+.atbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.atbar h2{font-size:18px;font-weight:700}
+.atbar-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toggle{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;background:rgba(10,36,114,.5);border:1px solid var(--border2);border-radius:var(--r3);color:var(--txt2);font-size:12px;font-weight:600;cursor:pointer;transition:all var(--tr);font-family:'Inter',sans-serif;min-height:36px;-webkit-tap-highlight-color:transparent}
+.toggle.on{background:var(--accent-dim);border-color:var(--accent-bright);color:var(--accent-bright)}
+.toggle:hover{border-color:var(--accent-bright);color:var(--accent-bright)}
+/* Participant cards */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.pcard{background:linear-gradient(145deg,rgba(10,36,114,.55),rgba(5,22,80,.65));border:1px solid var(--border2);border-radius:var(--r);padding:20px;cursor:pointer;transition:all var(--tr);position:relative;overflow:hidden;backdrop-filter:blur(8px)}
+.pcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,#1A438F,#5b9cff);transform:scaleY(0);transition:transform var(--tr)}
+.pcard:hover{border-color:rgba(59,125,248,.5);transform:translateY(-2px);box-shadow:0 8px 30px rgba(26,67,143,.3)}
+.pcard:hover::before{transform:scaleY(1)}
+.pcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.pcard-name{font-size:15px;font-weight:700;margin-bottom:3px}
+.pcard-college{font-size:11px;color:var(--txt3);line-height:1.4}
+.pcard-stats{display:flex;gap:14px;padding-top:12px;border-top:1px solid var(--border2);margin-top:6px}
+.pcard-stat{font-size:11px;color:var(--txt3)}
+.pcard-stat strong{display:block;font-size:15px;font-weight:700;color:var(--txt)}
+/* ======= ADMIN PARTICIPANT ======= */
+.p-hcard{background:linear-gradient(145deg,rgba(10,36,114,.6),rgba(5,22,80,.7));border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:16px;display:flex;gap:18px;flex-wrap:wrap}
+.p-hinfo{flex:1;min-width:0}
+.p-hname{font-size:20px;font-weight:800;margin-bottom:3px}
+.p-hcollege{color:var(--txt2);font-size:13px;margin-bottom:10px}
+.p-hmeta{display:flex;gap:14px;flex-wrap:wrap}
+.p-hmeta-item{font-size:12px;color:var(--txt3)}
+.p-hmeta-item i{margin-right:4px;color:var(--accent-bright)}
+.p-controls{background:linear-gradient(145deg,rgba(10,36,114,.55),rgba(5,22,80,.65));border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.p-controls .full{grid-column:1/-1}
+.p-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:8px}
+.p-nav-c{font-size:12px;color:var(--txt3);text-align:center}
+/* Solutions */
+.sol-card{background:linear-gradient(145deg,rgba(10,36,114,.5),rgba(5,22,80,.6));border:1px solid var(--border2);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.sol-hdr{display:flex;align-items:center;padding:15px 16px;cursor:pointer;gap:10px;transition:background var(--tr);-webkit-tap-highlight-color:transparent}
+.sol-hdr:hover{background:rgba(18,52,153,.3)}
+.sol-num{width:30px;height:30px;background:rgba(26,67,143,.3);border:1px solid var(--accent-bright);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#5b9cff;flex-shrink:0}
+.sol-title{font-size:14px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.sol-body{padding:16px;border-top:1px solid var(--border2);display:none}
+.sol-body.open{display:block}
+.sol-dgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.sol-dgrid .full{grid-column:1/-1}
+.sol-actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--border2);margin-top:14px}
+/* Empty state */
+.empty{text-align:center;padding:44px 20px;color:var(--txt3)}
+.empty i{font-size:44px;margin-bottom:14px;display:block;opacity:.3}
+.empty h3{font-size:17px;color:var(--txt2);margin-bottom:6px}
+/* Util */
+a{color:#5b9cff;text-decoration:none}a:hover{text-decoration:underline}
+.flex{display:flex}.flex-wrap{flex-wrap:wrap}.gap-8{gap:8px}.gap-12{gap:12px}.align-c{align-items:center}.jc-between{justify-content:space-between}
+.mt-8{margin-top:8px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}
+.mb-8{margin-bottom:8px}.mb-16{margin-bottom:16px}
+/* ===== MOBILE 768px ===== */
+@media(max-width:768px){
+  .nav{padding:10px 14px}
+  .nav-name{font-size:13px}
+  .pcontent,.pcontent-wide{padding:20px 14px}
+  .phead h1{font-size:21px}
+  .summary-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .fgrid{grid-template-columns:1fr}.fgrid .full{grid-column:1}
+  .detail-grid{grid-template-columns:1fr}.detail-grid .full{grid-column:1}
+  .p-controls{grid-template-columns:1fr}.p-controls .full{grid-column:1}
+  .sol-dgrid{grid-template-columns:1fr}.sol-dgrid .full{grid-column:1}
+  .dl-banner{flex-direction:column;gap:10px;padding:14px 16px}
+  .dl-date{font-size:15px}
+  .atbar{flex-direction:column;align-items:flex-start;gap:10px}
+  .atbar-r{width:100%;justify-content:flex-start}
+  .pgrid{grid-template-columns:1fr}
+  .nf-box{padding:18px 14px}
+  .btn-lg{padding:13px 20px;font-size:14px}
+  .suc-title{font-size:24px}
+  #toast-wrap{top:12px;right:12px;left:12px}
+  .toast{min-width:0;width:100%;max-width:100%;font-size:12px}
+}
+/* ===== MOBILE 480px (small phones) ===== */
+@media(max-width:480px){
+  .nav{padding:9px 12px}
+  .nav-logo{width:32px;height:32px;font-size:12px}
+  .nav-name{font-size:12px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-sub{display:none}
+  .nav-right .btn-sm{padding:7px 10px;font-size:11px}
+  #page-login{padding:14px}
+  .l-wrap{max-width:100%}
+  .l-header{margin-bottom:20px}
+  .l-logo{width:60px;height:60px;font-size:22px}
+  .l-title{font-size:21px}
+  .l-card{padding:18px 14px;border-radius:14px}
+  .l-card h2{font-size:15px;margin-bottom:16px}
+  .summary-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .scard{padding:12px 13px}
+  .scard-val{font-size:26px}
+  .scard-label{font-size:9px}
+  .phead h1{font-size:18px}
+  .phead p{font-size:12px}
+  .pcontent,.pcontent-wide{padding:14px 12px}
+  .btn-lg{width:100%;justify-content:center}
+  .suc-actions{flex-direction:column}
+  .suc-actions .btn{width:100%;justify-content:center}
+  .sub-hdr{padding:12px 13px;gap:8px}
+  .sub-title{font-size:13px}
+  .nf-box{padding:14px 12px}
+  .nf-box h3{font-size:15px;margin-bottom:14px}
+  .p-hcard{flex-direction:column;gap:12px}
+  .p-hmeta{gap:10px}
+  .p-nav .btn-sm{padding:8px 12px;font-size:12px}
+  .atbar h2{font-size:16px}
+  .card{padding:16px 13px}
+  .fg{margin-bottom:14px}
+  .dl-banner{border-radius:10px;padding:12px 13px}
+  .sol-hdr{padding:12px 13px}
+  .sol-body{padding:13px}
+  .pgrid{gap:10px}
+  .pcard{padding:16px}
+}
+/* ===== EXTRA SMALL 360px ===== */
+@media(max-width:360px){
+  .nav-name{max-width:100px;font-size:11px}
+  .summary-grid{grid-template-columns:1fr}
+  .l-title{font-size:18px}
+  .scard-val{font-size:22px}
+  .btn{font-size:12px}
+}
+/* ===== THEME UPDATE ONLY: balanced blue, white and black palette ===== */
+:root{
+  --bg-deep:#f4f7fb;
+  --bg-primary:#ffffff;
+  --bg-card:#ffffff;
+  --bg-card2:#f3f6fb;
+  --bg-hover:#e8f0ff;
+  --accent:#174ea6;
+  --accent2:#2563c7;
+  --accent-bright:#2563eb;
+  --accent-dim:rgba(37,99,235,.09);
+  --accent-glow:rgba(37,99,235,.18);
+  --border:#dce3ee;
+  --border2:#cbd5e1;
+  --txt:#111827;
+  --txt2:#374151;
+  --txt3:#6b7280;
+  --sh:0 4px 24px rgba(15,23,42,.08);
+  --sh2:0 8px 32px rgba(15,23,42,.12);
+}
+body{background:var(--bg-deep);color:var(--txt)}
+body::before{background:radial-gradient(ellipse at 15% 0%,rgba(37,99,235,.07) 0%,transparent 48%),radial-gradient(ellipse at 85% 90%,rgba(15,23,42,.035) 0%,transparent 52%)}
+::-webkit-scrollbar-track{background:#eef2f7}::-webkit-scrollbar-thumb{background:#9caec8}
+.nav{background:#111827;border-bottom:3px solid #2563eb;color:#fff}
+.nav .nav-name,.nav .nav-sub,.nav .nav-brand{color:#fff}
+.card,.l-card,.scard,.pcard,.p-hcard,.sub-item,.sol-card,.nf-box{background:#fff;border-color:#dce3ee;color:#111827;box-shadow:0 4px 20px rgba(15,23,42,.06);backdrop-filter:none}
+.l-card h2,.phead h1,.sub-title,.pcard-name,.p-hname,.sol-title,.nf-box h3,.atbar h2,.stitle{color:#111827}
+.phead p,.sub-meta,.sub-body,.pcard-college,.p-hcollege,.p-hmeta,.scard-label,.scard-sub,.dlabel,.fhint,.l-sub{color:#5b6472}
+.fc{background:#fff;color:#111827;border-color:#cbd5e1}
+.fc:focus{background:#fff;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.13)}
+.fc::placeholder{color:#9ca3af}
+select.fc{background-color:#fff}select.fc option{background:#fff;color:#111827}
+.fl{color:#374151}
+.btn-primary{background:linear-gradient(135deg,#174ea6,#2563eb);color:#fff;box-shadow:0 2px 10px rgba(37,99,235,.2)}
+.btn-primary:hover{background:linear-gradient(135deg,#1d4ed8,#3b82f6);box-shadow:0 5px 16px rgba(37,99,235,.25)}
+.btn-secondary{background:#fff;color:#111827;border-color:#cbd5e1;backdrop-filter:none}
+.btn-secondary:hover{background:#eff6ff;border-color:#2563eb;color:#174ea6}
+.btn-outline{color:#1d4ed8;border-color:#2563eb}.btn-outline:hover{background:#eff6ff}
+.sub-item:hover,.pcard:hover,.scard:hover{border-color:#93b4f5;box-shadow:0 8px 24px rgba(37,99,235,.09)}
+.sub-hdr,.sol-hdr{background:#f8fafc}
+.sub-body.open,.sol-body.open{background:#fff}
+.dl-banner{background:linear-gradient(110deg,#eff6ff,#fff);border-color:#bfdbfe}
+.atbar{background:transparent}
+.p-nav{border-color:#dce3ee}
+.p-nav-c{background:#f8fafc;color:#111827;border-color:#dce3ee}
+.pcard::before{background:#2563eb}
+.stitle::after{background:#2563eb}
+.wc{color:#6b7280}
+.cbwrap label{color:#374151}
+#loading{background:rgba(255,255,255,.94);color:#111827}
+#toast-wrap .toast{box-shadow:0 6px 24px rgba(15,23,42,.14)}
+@media(max-width:768px){.nav{background:#111827}}
+/* ===== End theme update ===== */
+
+
+/* ===== Refined contrast and balanced blue / white / black theme ===== */
+/* Keep the brand title readable on the light page background. */
+.l-title{background:none!important;color:#12377a!important;-webkit-text-fill-color:#12377a!important;}
+.l-sub{color:#4b5563!important;}
+.l-logo{background:linear-gradient(135deg,#102a63 0%,#2563eb 100%)!important;box-shadow:0 8px 24px rgba(37,99,235,.22)!important;}
+/* Clear, restrained blue accents with white surfaces and black text. */
+.card,.l-card,.scard,.pcard,.p-hcard,.sub-item,.sol-card,.nf-box{background:#fff!important;color:#111827!important;border-color:#d7e0ee!important;}
+.card h1,.card h2,.card h3,.p-hname,.p-hcollege,.p-hmeta,.p-hmeta-item,.phead h1,.phead p,.fl,.stitle,.sub-title,.pcard-name,.sol-title{color:#111827!important;}
+/* Participant review panel: white surface, blue top/left accent instead of a large blue block. */
+#p-controls{background:#fff!important;background-image:none!important;border:1px solid #d7e0ee!important;border-left:4px solid #2563eb!important;border-radius:12px!important;}
+#p-controls .fl{color:#1f2937!important;}
+#p-controls .fc{background:#fff!important;color:#111827!important;border-color:#cbd5e1!important;}
+#p-controls .fc::placeholder{color:#6b7280!important;opacity:1!important;}
+/* Toast notifications: solid blue with white readable text and icon. */
+#toast-wrap .toast{background:#174ea6!important;background-image:none!important;color:#fff!important;border:1px solid #2563eb!important;box-shadow:0 8px 24px rgba(15,23,42,.2)!important;}
+#toast-wrap .toast i,#toast-wrap .t-info i,#toast-wrap .t-success i,#toast-wrap .t-error i{color:#fff!important;}
+#toast-wrap .t-info{border-left:4px solid #fff!important;}
+#toast-wrap .t-success{border-left:4px solid #bbf7d0!important;}
+#toast-wrap .t-error{border-left:4px solid #fecaca!important;}
+/* Countdown and statistic tiles should not use low-contrast grey fills. */
+.countdown,.countdown-box,.timer-box,.timer-item,.count-box,.time-box{background:#111827!important;color:#fff!important;border:1px solid #2563eb!important;}
+.countdown *, .countdown-box *, .timer-box *, .timer-item *, .count-box *, .time-box *{color:inherit;}
+/* Text and secondary labels maintain contrast throughout the page. */
+.nav{background:#111827!important;color:#fff!important;border-bottom:3px solid #2563eb!important;}
+.nav .nav-name,.nav .nav-sub{color:#fff!important;}
+.btn-primary{background:#1d4ed8!important;color:#fff!important;}
+.btn-secondary{background:#fff!important;color:#111827!important;border:1px solid #cbd5e1!important;}
+.btn-outline{color:#174ea6!important;border-color:#2563eb!important;}
+.fhint,.l-info,.nav-sub{color:#4b5563;}
+@media(max-width:600px){.l-title{font-size:clamp(20px,6vw,26px)!important;line-height:1.25!important;}.l-header{padding:4px 8px;}}
+/* ===== End refined theme ===== */
+
+
+/* ===== Targeted header/logo and contrast refinement ===== */
+.navbar,.topbar,header{min-width:0}
+.nav-logo{overflow:hidden;padding:3px;background:#fff!important;border:1px solid rgba(255,255,255,.75);box-shadow:0 2px 10px rgba(37,99,235,.2)!important}
+.nav-logo img{display:block;width:100%;height:100%;object-fit:contain}
+.l-logo{overflow:hidden;background:#fff!important;border:1px solid rgba(37,99,235,.16);padding:7px;box-shadow:0 8px 32px rgba(37,99,235,.18)!important}
+.l-logo img{display:block;width:100%;height:100%;object-fit:contain}
+.nav-name{color:#fff!important;flex:0 1 auto;min-width:0}
+.nav-sub{color:#cbd5e1!important;white-space:nowrap}
+.nav-brand{flex:1 1 auto;min-width:0}
+.nav-right{margin-left:auto}
+.navbar .nav-brand,.topbar .nav-brand,header .nav-brand{max-width:calc(100% - 100px)}
+@media(max-width:520px){
+  .nav-logo{width:32px;height:32px}
+  .nav-brand{gap:7px}
+  .nav-name{font-size:12px}
+  .nav-sub{font-size:9px;white-space:normal;line-height:1.25}
+  .nav-right .btn{padding:7px 10px;min-height:36px;font-size:12px}
+  .navbar,.topbar,header{padding-left:10px!important;padding-right:10px!important}
+}
+
+
+/* ===== Mobile navbar layout and form-heading contrast fix ===== */
+.nav{gap:10px;}
+.nav-brand{min-width:0;flex:1 1 auto;max-width:none!important;}
+.nav-brand>div:not(.nav-logo){min-width:0;flex:1 1 auto;}
+.nav-name{display:block;color:#fff!important;opacity:1!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nav-sub{display:block;color:#cbd5e1!important;opacity:1!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35;}
+.nav-right{flex:0 0 auto;}
+.nav-right .btn{white-space:nowrap;}
+.nf-box h3{background:none!important;color:#111827!important;-webkit-text-fill-color:#111827!important;opacity:1!important;}
+.nf-box h3 i{color:#2563eb!important;-webkit-text-fill-color:#2563eb!important;}
+@media(max-width:520px){
+  .nav{padding:9px 10px!important;gap:8px;}
+  .nav-brand{gap:7px;flex:1 1 0;}
+  .nav-brand>div:not(.nav-logo){min-width:0;max-width:100%;}
+  .nav-logo{width:32px;height:32px;flex:0 0 32px;}
+  .nav-name{font-size:11px!important;line-height:1.25;}
+  .nav-sub{font-size:9px!important;line-height:1.2;}
+  .nav-right{gap:4px;}
+  .nav-right .btn{padding:7px 9px!important;min-height:34px;font-size:11px!important;}
+  #page-submissions .nf-box h3{font-size:17px;line-height:1.35;margin-bottom:16px;}
+}
+@media(max-width:360px){
+  .nav-sub{display:none!important;}
+  .nav-name{font-size:10px!important;}
+  .nav-right .btn{padding:6px 7px!important;font-size:10px!important;}
+}
+/* ===== End mobile fixes ===== */
+
+</style>
+</head>
+<body>
+
+<div id="toast-wrap"></div>
+<div id="loading"><div class="spin"></div></div>
+
+<!-- ====== LOGIN ====== -->
+<div id="page-login" class="page active">
+<div class="l-wrap">
+  <div class="l-header">
+    <div class="l-logo"><img src="assets/ace-digital-mark.png" alt="Ace Digitals logo"></div>
+    <h1 class="l-title">BEXO CHALLENGERS</h1>
+    <p class="l-sub">Round 2 Submission Portal &bull; Ace Digital</p>
+  </div>
+  <div class="l-card">
+    <h2><i class="fa-solid fa-lock" style="color:var(--accent);margin-right:8px"></i>Sign In to Continue</h2>
+    <div class="fg">
+      <label class="fl" for="l-email">Email Address</label>
+      <input type="email" id="l-email" class="fc" placeholder="Enter your registered email" autocomplete="email">
+    </div>
+    <div class="fg">
+      <label class="fl" for="l-pass">Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="l-pass" class="fc" placeholder="Enter your password" autocomplete="current-password">
+        <button class="pw-toggle" onclick="togglePw('l-pass',this)" type="button"><i class="fa-solid fa-eye"></i></button>
+      </div>
+    </div>
+    <div id="l-err" style="display:none;margin-bottom:14px;padding:10px 13px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:7px;font-size:13px;color:var(--red)"></div>
+    <button class="btn btn-primary btn-full btn-lg" onclick="doLogin()">
+      <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
+    </button>
+    <div class="l-info">
+      <i class="fa-solid fa-circle-info" style="color:var(--accent);margin-right:5px"></i>
+      <strong>First time?</strong> Enter your whitelisted email and choose a password — it will be saved for future logins.
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ====== PROFILE ====== -->
+<div id="page-profile" class="page">
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo"><img src="assets/ace-digital-mark.png" alt="Ace Digitals logo"></div>
+    <div><div class="nav-name">BEXO CHALLENGERS</div><div class="nav-sub">Round 2 &bull; Submission Portal</div></div>
+  </div>
+  <div class="nav-right">
+    <span id="pr-uname" style="font-size:12px;color:var(--txt3)"></span>
+    <button class="btn btn-secondary btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+  </div>
+</nav>
+<div class="pcontent">
+  <div class="phead">
+    <h1>👋 Confirm Your Profile</h1>
+    <p>Review your details and edit if needed before proceeding to submission.</p>
+  </div>
+  <div class="card mb-16">
+    <div class="flex align-c gap-12 mb-16">
+      <div class="avatar" id="pr-avatar" style="width:52px;height:52px;font-size:20px;border-radius:13px"></div>
+      <div>
+        <div id="pr-dispname" style="font-size:18px;font-weight:700"></div>
+        <div id="pr-dispproblem" style="font-size:12px;color:var(--txt3);margin-top:2px"></div>
+      </div>
+    </div>
+    <div class="fgrid">
+      <div class="fg"><label class="fl">Full Name *</label><input type="text" id="pr-name" class="fc" placeholder="Your full name"></div>
+      <div class="fg"><label class="fl">Email Address</label><input type="email" id="pr-email" class="fc" readonly style="opacity:.6;cursor:not-allowed"></div>
+      <div class="fg"><label class="fl">Phone Number *</label><input type="tel" id="pr-phone" class="fc" placeholder="Your phone number"></div>
+      <div class="fg"><label class="fl">College / Institution *</label><input type="text" id="pr-college" class="fc" placeholder="Your college name"></div>
+      <div class="fg full"><label class="fl">Problem Statement</label><input type="text" id="pr-problem" class="fc" placeholder="Your assigned problem statement"></div>
+    </div>
+  </div>
+  <div class="flex gap-12" style="justify-content:flex-end;flex-wrap:wrap">
+    <button class="btn btn-secondary" onclick="logout()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+    <button class="btn btn-primary btn-lg" onclick="confirmProfile()">Confirm & Continue <i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+</div>
+</div>
+
+<!-- ====== SUBMISSIONS ====== -->
+<div id="page-submissions" class="page">
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo"><img src="assets/ace-digital-mark.png" alt="Ace Digitals logo"></div>
+    <div><div class="nav-name">BEXO CHALLENGERS</div><div class="nav-sub">Round 2 &bull; Submission Portal</div></div>
+  </div>
+  <div class="nav-right">
+    <div id="sub-dl-badge" style="font-size:11px;color:var(--txt3)"></div>
+    <button class="btn btn-secondary btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+  </div>
+</nav>
+<div class="pcontent">
+  <div class="flex jc-between align-c flex-wrap gap-12 mb-16">
+    <div>
+      <h1 style="font-size:26px;margin-bottom:4px">My Submissions</h1>
+      <p id="sub-info" style="font-size:13px;color:var(--txt3)"></p>
+    </div>
+    <button class="btn btn-primary" onclick="scrollToForm()"><i class="fa-solid fa-plus"></i> Add New Solution</button>
+  </div>
+  <div id="sub-dl-notice" class="mb-16"></div>
+  <div id="sub-list"></div>
+  <!-- New/Edit Form -->
+  <div id="sub-form" class="nf-box">
+    <h3><i class="fa-solid fa-file-circle-plus" style="color:var(--accent);margin-right:8px"></i><span id="form-hd">Add New Submission</span></h3>
+    <input type="hidden" id="edit-id">
+    <div class="fg"><label class="fl">Solution Title *</label><input type="text" id="s-title" class="fc" placeholder="Auto-filled — edit if needed"></div>
+    <div class="fg">
+      <label class="fl">Short Description * <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3)">(what it does — ~100 words)</span></label>
+      <textarea id="s-desc" class="fc" rows="5" placeholder="Briefly describe your solution and what it does..." oninput="wc(this,'s-wc')"></textarea>
+      <div class="wc" id="s-wc">0 words</div>
+    </div>
+    <div class="fg"><label class="fl">Live Link / Demo URL *</label><input type="url" id="s-link" class="fc" placeholder="https://your-demo.example.com"></div>
+    <div class="fg"><label class="fl">GitHub / Drive Link <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3)">(code or files URL)</span></label><input type="url" id="s-repo" class="fc" placeholder="https://github.com/your-repo or drive.google.com/..."><div class="fhint"><i class="fa-brands fa-github" style="margin-right:4px"></i>GitHub repo, Google Drive folder, or any file link</div></div>
+    <div class="fg"><label class="fl">How did you solve it? <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--txt3)">(steps you followed)</span></label><textarea id="s-approach" class="fc" rows="6" placeholder="Explain the steps you followed to build your solution..."></textarea></div>
+    <div class="fg"><label class="fl">Techniques Used</label><input type="text" id="s-tech" class="fc" placeholder="e.g. Brute Force, Automation, API, ML..."><div class="fhint">Separate with commas</div></div>
+    <div class="fg"><label class="fl">Tools &amp; Technologies Used</label><input type="text" id="s-tools" class="fc" placeholder="e.g. React, Python, Flask, Firebase, OpenAI..."></div>
+    <div class="fg"><label class="fl">Challenges Faced &amp; How You Handled Them</label><textarea id="s-challenges" class="fc" rows="5" placeholder="Describe challenges you encountered and how you overcame them..."></textarea></div>
+    <div class="fg">
+      <label class="fl">Declaration *</label>
+      <div class="cbwrap" onclick="document.getElementById('s-decl').click()">
+        <input type="checkbox" id="s-decl" onclick="event.stopPropagation()">
+        <label for="s-decl"><strong>I declare that this is my own original work.</strong> I have followed all the rules and guidelines set for BEXO Challengers Round 2, and all content submitted is authentic and my own.</label>
+      </div>
+    </div>
+    <div class="flex gap-12" style="justify-content:flex-end;flex-wrap:wrap;margin-top:4px">
+      <button class="btn btn-secondary" onclick="clearForm()"><i class="fa-solid fa-xmark"></i> Clear</button>
+      <button class="btn btn-primary btn-lg" onclick="submitSol()"><i class="fa-solid fa-paper-plane"></i> <span id="sub-btn-txt">Submit Solution</span></button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== SUCCESS ====== -->
+<div id="page-success" class="page">
+<nav class="nav" style="position:fixed;top:0;left:0;right:0">
+  <div class="nav-brand">
+    <div class="nav-logo"><img src="assets/ace-digital-mark.png" alt="Ace Digitals logo"></div>
+    <div><div class="nav-name">BEXO CHALLENGERS</div><div class="nav-sub">Round 2 &bull; Submission Portal</div></div>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-secondary btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+  </div>
+</nav>
+<div class="suc-wrap" style="margin-top:80px">
+  <div class="suc-icon"><i class="fa-solid fa-circle-check"></i></div>
+  <h1 class="suc-title">Successfully Submitted!</h1>
+  <p class="suc-sub" id="suc-msg">Your solution has been submitted for BEXO Challengers Round 2. Good luck! 🚀</p>
+  <div class="suc-actions">
+    <button class="btn btn-secondary btn-lg" onclick="goSubs()"><i class="fa-solid fa-list"></i> My Submissions</button>
+    <button class="btn btn-primary btn-lg" onclick="addMore()"><i class="fa-solid fa-plus"></i> Add Another Solution</button>
+  </div>
+</div>
+</div>
+
+<!-- ====== ADMIN DASHBOARD ====== -->
+<div id="page-admin-dashboard" class="page">
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo admin"><img src="assets/ace-digital-mark.png" alt="Ace Digitals logo"></div>
+    <div><div class="nav-name">Admin Dashboard</div><div class="nav-sub">BEXO CHALLENGERS ROUND 2</div></div>
+  </div>
+  <div class="nav-right">
+    <span style="font-size:11px;color:var(--txt3)">Admin@Acedigital.cc</span>
+    <button class="btn btn-secondary btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+  </div>
+</nav>
+<div class="pcontent-wide">
+  <div class="summary-grid" id="sum-grid"></div>
+  <div class="dl-banner">
+    <div><div class="dl-label"><i class="fa-solid fa-clock"></i> Submission Deadline</div><div class="dl-date">16 October 2026 &bull; 12:00 PM</div></div>
+    <div class="cd">
+      <div class="cd-item"><span class="cd-val" id="cd-d">--</span><span class="cd-lbl">Days</span></div>
+      <div class="cd-item"><span class="cd-val" id="cd-h">--</span><span class="cd-lbl">Hours</span></div>
+      <div class="cd-item"><span class="cd-val" id="cd-m">--</span><span class="cd-lbl">Mins</span></div>
+      <div class="cd-item"><span class="cd-val" id="cd-s">--</span><span class="cd-lbl">Secs</span></div>
+    </div>
+  </div>
+  <div class="atbar">
+    <div><h2>Participants <span id="pc-label" style="font-size:13px;font-weight:400;color:var(--txt3)"></span></h2></div>
+    <div class="atbar-r">
+      <button class="toggle" id="pend-btn" onclick="togglePending()"><i class="fa-solid fa-filter"></i> Pending Only</button>
+      <button class="btn btn-secondary btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> CSV</button>
+      <button class="btn btn-secondary btn-sm" onclick="dlAllPDF()"><i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> All PDF</button>
+    </div>
+  </div>
+  <div class="pgrid" id="pgrid"></div>
+</div>
+</div>
+
+<!-- ====== ADMIN PARTICIPANT ====== -->
+<div id="page-admin-participant" class="page">
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo admin"><img src="assets/ace-digital-mark.png" alt="Ace Digitals logo"></div>
+    <div><div class="nav-name">Participant Detail</div><div class="nav-sub">BEXO CHALLENGERS ROUND 2</div></div>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-secondary btn-sm" onclick="goDash()"><i class="fa-solid fa-arrow-left"></i> Dashboard</button>
+    <button class="btn btn-secondary btn-sm" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+  </div>
+</nav>
+<div class="pcontent">
+  <div class="p-nav">
+    <button class="btn btn-secondary btn-sm" id="prev-btn" onclick="navP(-1)"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+    <div class="p-nav-c" id="nav-label"></div>
+    <button class="btn btn-secondary btn-sm" id="next-btn" onclick="navP(1)">Next <i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+  <div class="p-hcard" id="p-header"></div>
+  <div class="p-controls" id="p-controls"></div>
+  <div class="flex gap-8 flex-wrap mb-16">
+    <button class="btn btn-secondary" onclick="dlPartPDF()"><i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> Download All Solutions PDF</button>
+  </div>
+  <div class="stitle"><i class="fa-solid fa-layer-group" style="color:var(--accent)"></i> Submitted Solutions</div>
+  <div id="sols-list"></div>
+</div>
+</div>
+
+<script>
+// ========== CONFIG ==========
+const DEADLINE = new Date('2026-10-16T12:00:00');
+
+const ADMIN = { email:'Admin@Acedigital.cc', password:'admin@1727' };
+
+const PDATA = {
+  'vishalk.23cse@kongu.edu':         {id:'P001',name:'VISHAL K',email:'vishalk.23cse@kongu.edu',phone:'6381180488',college:'Kongu Engineering College',problem:'Digital Queue & Follow-Up for Public Services'},
+  'iyshpadmasri@gmail.com':           {id:'P002',name:'PADMASRI S',email:'iyshpadmasri@gmail.com',phone:'6382105788',college:'Dr. Mahalingam College of Engineering and Technology',problem:'Repair Passport for Every Product'},
+  'jothimani782006@gmail.com':        {id:'P003',name:'JOTHIMANI P',email:'jothimani782006@gmail.com',phone:'9489025415',college:'Dr. Mahalingam College of Engineering and Technology',problem:'Return Rescue for Online Sellers'},
+  'priyadharshanravichandran2@gmail.com':{id:'P004',name:'PRIYADHARSHAN R',email:'priyadharshanravichandran2@gmail.com',phone:'9626162695',college:'Dr. Mahalingam College of Engineering and Technology',problem:'Project-Based Career Evidence'},
+  'rahul5341r@gmail.com':             {id:'P005',name:'RAHUL R',email:'rahul5341r@gmail.com',phone:'7418891851',college:'V.S.B College of Engineering Technical Campus',problem:'Return Rescue for Online Sellers'},
+  'jsaakash22@gmail.com':             {id:'P006',name:'AAKASH J S',email:'jsaakash22@gmail.com',phone:'8867832633',college:'Kongu Engineering College',problem:'Repair Passport for Every Product'},
+  'kumar4112005@gmail.com':           {id:'P007',name:'NANDHA KUMAR B',email:'kumar4112005@gmail.com',phone:'9344376224',college:'Dr. Mahalingam College of Engineering and Technology',problem:'Return Rescue for Online Sellers'},
+  'test@bexo.com':                    {id:'T001',name:'TEST USER',email:'test@bexo.com',phone:'9999999999',college:'Test College — For Testing Only',problem:'Test Problem Statement'}
+};
+const EMAILS = Object.keys(PDATA).filter(e=>e!=='test@bexo.com');
+const ALL_EMAILS = Object.keys(PDATA);
+// Pre-seed test account password
+(function(){const pw=JSON.parse(localStorage.getItem('bexo_pw')||'{}');if(!pw['test@bexo.com']){pw['test@bexo.com']='test@123';localStorage.setItem('bexo_pw',JSON.stringify(pw));}}());
+
+// ========== STATE ==========
+let CU = null, isAdmin = false, curPI = 0, pendOnly = false, cdInt = null;
+
+// ========== STORAGE ==========
+const LS = {
+  get: k => JSON.parse(localStorage.getItem(k)||'null'),
+  set: (k,v) => localStorage.setItem(k,JSON.stringify(v)),
+  pw: () => LS.get('bexo_pw')||{},
+  savePw: d => LS.set('bexo_pw',d),
+  prof: () => LS.get('bexo_prof')||{},
+  saveProf: d => LS.set('bexo_prof',d),
+  subs: () => LS.get('bexo_subs')||[],
+  saveSubs: d => LS.set('bexo_subs',d),
+  pstat: () => LS.get('bexo_pstat')||{},
+  savePstat: d => LS.set('bexo_pstat',d)
+};
+
+function getProfile(email){
+  const p=LS.prof();
+  return p[email]||PDATA[email]||null;
+}
+function saveProfile(email,data){
+  const p=LS.prof();p[email]=data;LS.saveProf(p);
+}
+function getSubs(email){
+  return LS.subs().filter(s=>s.pEmail===email);
+}
+
+// ========== PAGES ==========
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);
+  if(pg){pg.classList.add('active');window.scrollTo(0,0);}
+}
+
+// ========== AUTH ==========
+function doLogin(){
+  const email=document.getElementById('l-email').value.trim();
+  const pass=document.getElementById('l-pass').value;
+  const errEl=document.getElementById('l-err');
+  errEl.style.display='none';
+  if(!email||!pass){errEl.textContent='Please enter both email and password.';errEl.style.display='block';return;}
+
+  if(email.toLowerCase()===ADMIN.email.toLowerCase()){
+    if(pass===ADMIN.password){CU=email;isAdmin=true;loadDash();showPage('admin-dashboard');toast('Welcome, Admin!','success');}
+    else{errEl.textContent='Incorrect admin password.';errEl.style.display='block';}
+    return;
+  }
+  // Special case: test account always works
+  if(email.toLowerCase()==='test@bexo.com'){
+    if(pass==='test@123'){CU='test@bexo.com';isAdmin=false;loadProfile();showPage('profile');toast('Welcome, Test User!','success');}
+    else{errEl.textContent='Incorrect password for test account. Use: test@123';errEl.style.display='block';}
+    return;
+  }
+  const me=ALL_EMAILS.find(e=>e.toLowerCase()===email.toLowerCase());
+  if(!me){errEl.textContent='This email is not authorized. Only Round 2 participants can log in.';errEl.style.display='block';return;}
+  const pws=LS.pw();
+  if(pws[me]){
+    if(pws[me]!==pass){errEl.textContent='Incorrect password. Please try again.';errEl.style.display='block';return;}
+  }else{
+    pws[me]=pass;LS.savePw(pws);
+    toast('Password set! Welcome to BEXO Round 2.','success');
+  }
+  CU=me;isAdmin=false;loadProfile();showPage('profile');
+}
+
+function logout(){
+  CU=null;isAdmin=false;if(cdInt)clearInterval(cdInt);
+  document.getElementById('l-email').value='';
+  document.getElementById('l-pass').value='';
+  document.getElementById('l-err').style.display='none';
+  showPage('login');toast('Logged out.','info');
+}
+
+// ========== PROFILE ==========
+function loadProfile(){
+  const p=getProfile(CU);
+  if(!p)return;
+  document.getElementById('pr-name').value=p.name||'';
+  document.getElementById('pr-email').value=p.email||CU;
+  document.getElementById('pr-phone').value=p.phone||'';
+  document.getElementById('pr-college').value=p.college||'';
+  document.getElementById('pr-problem').value=p.problem||'';
+  document.getElementById('pr-uname').textContent=p.name;
+  document.getElementById('pr-dispname').textContent=p.name;
+  document.getElementById('pr-dispproblem').textContent='📝 '+p.problem;
+  document.getElementById('pr-avatar').textContent=p.name.charAt(0).toUpperCase();
+}
+
+function confirmProfile(){
+  const name=document.getElementById('pr-name').value.trim();
+  const phone=document.getElementById('pr-phone').value.trim();
+  const college=document.getElementById('pr-college').value.trim();
+  const problem=document.getElementById('pr-problem').value.trim();
+  if(!name||!phone||!college||!problem){toast('Please fill in all required fields.','error');return;}
+  saveProfile(CU,{...PDATA[CU],name,phone,college,problem});
+  loadSubsPage();showPage('submissions');toast('Profile confirmed! Now submit your solution.','success');
+}
+
+// ========== SUBMISSIONS ==========
+function loadSubsPage(){
+  const p=getProfile(CU);
+  document.getElementById('sub-info').textContent=`${p.name} • ${p.college} • ${p.problem}`;
+  const userSubs=getSubs(CU);
+  const n=userSubs.length+1;
+  document.getElementById('s-title').value=`${p.problem} — Solution #${n}`;
+  const now=new Date(),late=now>DEADLINE;
+  document.getElementById('sub-dl-notice').innerHTML=late
+    ?`<div style="padding:11px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:7px;font-size:13px;color:var(--red)"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Deadline Passed:</strong> Submissions after 16 Oct 2026, 12:00 PM will be marked as <strong>Late</strong>.</div>`
+    :`<div style="padding:11px 14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:7px;font-size:13px;color:var(--green)"><i class="fa-solid fa-clock"></i> <strong>Deadline:</strong> 16 October 2026, 12:00 PM — Submissions are open.</div>`;
+  document.getElementById('sub-dl-badge').textContent=late?'⚠ Deadline Passed':'📅 Deadline: 16 Oct 2026 12PM';
+  renderSubs();
+}
+
+function renderSubs(){
+  const subs=getSubs(CU).sort((a,b)=>new Date(b.at)-new Date(a.at));
+  const c=document.getElementById('sub-list');
+  if(!subs.length){c.innerHTML=`<div class="empty"><i class="fa-solid fa-inbox"></i><h3>No submissions yet</h3><p>Fill the form below to add your first solution.</p></div>`;return;}
+  c.innerHTML=subs.map(s=>{
+    const late=new Date(s.at)>DEADLINE;
+    const dt=new Date(s.at).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+    return`<div class="sub-item">
+      <div class="sub-hdr" onclick="togSub('${s.id}')">
+        <div style="flex:1">
+          <div class="sub-title"><span style="color:var(--accent);margin-right:7px">#${s.no}</span>${esc(s.title)}${late?` <span class="badge b-late" style="margin-left:7px"><i class="fa-solid fa-clock"></i> Late</span>`:''}</div>
+          <div class="sub-meta"><i class="fa-solid fa-calendar-check" style="margin-right:4px"></i>Submitted: ${dt}</div>
+        </div>
+        <div class="flex align-c gap-8">
+          <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();editSub('${s.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+          <i class="fa-solid fa-chevron-down" id="chev-${s.id}" style="color:var(--txt3);transition:transform .2s"></i>
+        </div>
+      </div>
+      <div class="sub-body" id="sb-${s.id}">
+        <div class="detail-grid" style="margin-top:16px">
+          <div><div class="dlabel">Short Description</div><div class="dval">${esc(s.desc||'—')}</div></div>
+          <div><div class="dlabel">Live Link</div><div class="dval">${s.link?`<a href="${esc(s.link)}" target="_blank">${esc(s.link)}</a>`:'—'}</div></div>
+          <div><div class="dlabel">GitHub / Drive Link</div><div class="dval">${s.repo?`<a href="${esc(s.repo)}" target="_blank">${esc(s.repo)}</a>`:'—'}</div></div>
+          <div class="full"><div class="dlabel">How I Solved It</div><div class="dval">${esc(s.approach||'—')}</div></div>
+          <div><div class="dlabel">Techniques</div><div class="dval">${esc(s.tech||'—')}</div></div>
+          <div><div class="dlabel">Tools &amp; Technologies</div><div class="dval">${esc(s.tools||'—')}</div></div>
+          <div class="full"><div class="dlabel">Challenges Faced</div><div class="dval">${esc(s.challenges||'—')}</div></div>
+        </div>
+        <div class="flex gap-8 flex-wrap" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+          <button class="btn btn-sm btn-secondary" onclick="editSub('${s.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+          <button class="btn btn-sm btn-red" onclick="delSub('${s.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togSub(id){
+  const b=document.getElementById('sb-'+id),ch=document.getElementById('chev-'+id);
+  b.classList.toggle('open');ch.style.transform=b.classList.contains('open')?'rotate(180deg)':'';
+}
+function editSub(id){
+  const s=LS.subs().find(x=>x.id===id);if(!s)return;
+  document.getElementById('edit-id').value=id;
+  document.getElementById('form-hd').textContent='Edit Submission #'+s.no;
+  document.getElementById('sub-btn-txt').textContent='Update Submission';
+  document.getElementById('s-title').value=s.title;
+  document.getElementById('s-desc').value=s.desc||'';
+  document.getElementById('s-link').value=s.link||'';
+  document.getElementById('s-repo').value=s.repo||'';
+  document.getElementById('s-approach').value=s.approach||'';
+  document.getElementById('s-tech').value=s.tech||'';
+  document.getElementById('s-tools').value=s.tools||'';
+  document.getElementById('s-challenges').value=s.challenges||'';
+  document.getElementById('s-decl').checked=s.decl||false;
+  wc(document.getElementById('s-desc'),'s-wc');
+  scrollToForm();
+}
+function delSub(id){
+  if(!confirm('Delete this submission?'))return;
+  LS.saveSubs(LS.subs().filter(s=>s.id!==id));
+  renderSubs();toast('Submission deleted.','info');
+}
+function scrollToForm(){document.getElementById('sub-form').scrollIntoView({behavior:'smooth',block:'start'});}
+function clearForm(){
+  document.getElementById('edit-id').value='';
+  document.getElementById('form-hd').textContent='Add New Submission';
+  document.getElementById('sub-btn-txt').textContent='Submit Solution';
+  const p=getProfile(CU),n=getSubs(CU).length+1;
+  document.getElementById('s-title').value=`${p.problem} — Solution #${n}`;
+  ['s-desc','s-link','s-repo','s-approach','s-tech','s-tools','s-challenges'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('s-decl').checked=false;
+  wc(document.getElementById('s-desc'),'s-wc');
+}
+function submitSol(){
+  const title=document.getElementById('s-title').value.trim();
+  const desc=document.getElementById('s-desc').value.trim();
+  const link=document.getElementById('s-link').value.trim();
+  const repo=document.getElementById('s-repo').value.trim();
+  const approach=document.getElementById('s-approach').value.trim();
+  const tech=document.getElementById('s-tech').value.trim();
+  const tools=document.getElementById('s-tools').value.trim();
+  const challenges=document.getElementById('s-challenges').value.trim();
+  const decl=document.getElementById('s-decl').checked;
+  const editId=document.getElementById('edit-id').value;
+  if(!title){toast('Please enter a solution title.','error');return;}
+  if(!desc){toast('Please enter a short description.','error');return;}
+  if(!link){toast('Please enter a live link / demo URL.','error');return;}
+  if(!decl){toast('Please accept the declaration to submit.','error');return;}
+  let subs=LS.subs();
+  if(editId){
+    const i=subs.findIndex(s=>s.id===editId);
+    if(i!==-1)subs[i]={...subs[i],title,desc,link,repo,approach,tech,tools,challenges,decl,updAt:new Date().toISOString()};
+    LS.saveSubs(subs);toast('Submission updated!','success');clearForm();renderSubs();
+  }else{
+    const no=getSubs(CU).length+1;
+    const ns={id:'s_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),pEmail:CU,no,title,desc,link,repo,approach,tech,tools,challenges,decl,at:new Date().toISOString()};
+    subs.push(ns);LS.saveSubs(subs);
+    document.getElementById('suc-msg').innerHTML=`<strong>Solution #${no}: "${title}"</strong> has been submitted for BEXO Challengers Round 2. Keep it up! 🚀`;
+    showPage('success');
+  }
+}
+function goSubs(){loadSubsPage();showPage('submissions');}
+function addMore(){clearForm();loadSubsPage();showPage('submissions');setTimeout(scrollToForm,300);}
+
+// ========== ADMIN DASHBOARD ==========
+function loadDash(){
+  const subs=LS.subs(),pstat=LS.pstat();
+  const total=EMAILS.length,tsubs=subs.length;
+  const reviewed=EMAILS.filter(e=>pstat[e]?.status==='Reviewed').length;
+  const shortlisted=EMAILS.filter(e=>pstat[e]?.status==='Shortlisted').length;
+  const pending=EMAILS.filter(e=>!pstat[e]?.status||pstat[e]?.status==='Pending').length;
+  document.getElementById('sum-grid').innerHTML=`
+    <div class="scard c-accent"><div class="scard-label">Total Participants</div><div class="scard-val">${total}</div><div class="scard-sub">Round 2 Contestants</div></div>
+    <div class="scard"><div class="scard-label">Total Submissions</div><div class="scard-val">${tsubs}</div><div class="scard-sub">${tsubs>0?`Avg ${(tsubs/total).toFixed(1)}/participant`:'No submissions yet'}</div></div>
+    <div class="scard c-green"><div class="scard-label">Reviewed</div><div class="scard-val">${reviewed+shortlisted}</div><div class="scard-sub">${shortlisted} Shortlisted</div></div>
+    <div class="scard c-amber"><div class="scard-label">Pending Review</div><div class="scard-val">${pending}</div><div class="scard-sub">Awaiting judgment</div></div>`;
+  renderPCards();startCD();
+}
+function renderPCards(){
+  const subs=LS.subs(),pstat=LS.pstat();
+  let emails=EMAILS;
+  if(pendOnly)emails=emails.filter(e=>!pstat[e]?.status||pstat[e]?.status==='Pending');
+  document.getElementById('pc-label').textContent=`(${emails.length} of ${EMAILS.length})`;
+  const c=document.getElementById('pgrid');
+  if(!emails.length){c.innerHTML=`<div class="empty" style="grid-column:1/-1"><i class="fa-solid fa-check-circle" style="color:var(--green)"></i><h3>All reviewed!</h3></div>`;return;}
+  c.innerHTML=emails.map(email=>{
+    const p=getProfile(email),esubs=subs.filter(s=>s.pEmail===email);
+    const status=pstat[email]?.status||'Pending';
+    const last=esubs.length?[...esubs].sort((a,b)=>new Date(b.at)-new Date(a.at))[0]:null;
+    const lastDt=last?new Date(last.at).toLocaleString('en-IN',{dateStyle:'short',timeStyle:'short'}):'No submission';
+    const hasLate=esubs.some(s=>new Date(s.at)>DEADLINE);
+    const ini=p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const scls=status==='Reviewed'?'b-reviewed':status==='Shortlisted'?'b-shortlisted':'b-pending';
+    return`<div class="pcard" onclick="openPDetail('${email}')">
+      <div class="pcard-top">
+        <div class="flex gap-12 align-c">
+          <div class="avatar" style="width:46px;height:46px;font-size:17px;border-radius:11px">${ini}</div>
+          <div><div class="pcard-name">${esc(p.name)}</div><div class="pcard-college">${esc(p.college)}</div></div>
+        </div>
+        <span class="badge ${scls}">${status}</span>
+      </div>
+      <div style="font-size:12px;color:var(--txt3);margin-bottom:10px"><i class="fa-solid fa-lightbulb" style="color:var(--accent);margin-right:4px"></i>${esc(p.problem)}</div>
+      ${hasLate?`<span class="badge b-late" style="margin-bottom:10px"><i class="fa-solid fa-clock"></i> Has Late Submission</span>`:''}
+      <div class="pcard-stats">
+        <div class="pcard-stat"><strong>${esubs.length}</strong>${esubs.length===1?'Solution':'Solutions'}</div>
+        <div class="pcard-stat"><strong style="font-size:11px;font-weight:500">${lastDt}</strong>Last submitted</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function togglePending(){
+  pendOnly=!pendOnly;
+  document.getElementById('pend-btn').classList.toggle('on',pendOnly);
+  renderPCards();
+}
+function startCD(){
+  if(cdInt)clearInterval(cdInt);
+  function upd(){
+    const diff=DEADLINE-new Date();
+    if(diff<=0){['cd-d','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='00');return;}
+    const d=Math.floor(diff/864e5),h=Math.floor(diff%864e5/36e5),m=Math.floor(diff%36e5/6e4),s=Math.floor(diff%6e4/1e3);
+    document.getElementById('cd-d').textContent=String(d).padStart(2,'0');
+    document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+  }
+  upd();cdInt=setInterval(upd,1000);
+}
+function goDash(){loadDash();showPage('admin-dashboard');}
+
+// ========== ADMIN PARTICIPANT DETAIL ==========
+function openPDetail(email){
+  curPI=EMAILS.indexOf(email);renderPDetail();showPage('admin-participant');
+}
+function navP(dir){curPI=(curPI+dir+EMAILS.length)%EMAILS.length;renderPDetail();window.scrollTo(0,0);}
+function renderPDetail(){
+  const email=EMAILS[curPI];
+  const p=getProfile(email);
+  const subs=LS.subs().filter(s=>s.pEmail===email).sort((a,b)=>new Date(b.at)-new Date(a.at));
+  const pstat=LS.pstat();
+  const ps=pstat[email]||{status:'Pending',judgeNotes:''};
+  const ini=p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('nav-label').textContent=`${curPI+1} of ${EMAILS.length}`;
+  document.getElementById('p-header').innerHTML=`
+    <div class="avatar" style="width:68px;height:68px;font-size:26px;border-radius:15px">${ini}</div>
+    <div class="p-hinfo">
+      <div class="p-hname">${esc(p.name)}</div>
+      <div class="p-hcollege">${esc(p.college)}</div>
+      <div class="p-hmeta">
+        <div class="p-hmeta-item"><i class="fa-solid fa-envelope"></i>${esc(p.email)}</div>
+        <div class="p-hmeta-item"><i class="fa-solid fa-phone"></i>${esc(p.phone)}</div>
+        <div class="p-hmeta-item"><i class="fa-solid fa-lightbulb"></i>${esc(p.problem)}</div>
+        <div class="p-hmeta-item"><i class="fa-solid fa-layer-group"></i>${subs.length} Solution${subs.length!==1?'s':''}</div>
+      </div>
+    </div>`;
+  document.getElementById('p-controls').innerHTML=`
+    <div class="fg"><label class="fl">Review Status</label>
+      <select class="fc" id="pstat-sel" onchange="savePstat('${email}')">
+        <option value="Pending" ${ps.status==='Pending'?'selected':''}>⏳ Pending</option>
+        <option value="Reviewed" ${ps.status==='Reviewed'?'selected':''}>✅ Reviewed</option>
+        <option value="Shortlisted" ${ps.status==='Shortlisted'?'selected':''}>⭐ Shortlisted</option>
+      </select></div>
+    <div class="fg"><label class="fl">Judge Notes (Overall)</label>
+      <textarea class="fc" id="pnotes" rows="3" placeholder="Add overall notes about this participant..." onchange="savePstat('${email}')">${esc(ps.judgeNotes||'')}</textarea></div>`;
+  const sl=document.getElementById('sols-list');
+  if(!subs.length){sl.innerHTML=`<div class="empty"><i class="fa-solid fa-inbox"></i><h3>No submissions yet</h3><p>This participant hasn't submitted any solutions.</p></div>`;return;}
+  sl.innerHTML=subs.map(s=>{
+    const late=new Date(s.at)>DEADLINE;
+    const dt=new Date(s.at).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+    const pst2=LS.pstat();
+    const snote=pst2[email]?.snotes?.[s.id]||'';
+    return`<div class="sol-card">
+      <div class="sol-hdr" onclick="togSol('${s.id}')">
+        <div class="sol-num">#${s.no}</div>
+        <div class="sol-title">${esc(s.title)}</div>
+        <div class="flex align-c gap-8" style="flex-shrink:0">
+          ${late?`<span class="badge b-late"><i class="fa-solid fa-clock"></i> Late</span>`:`<span class="badge b-ontime">On Time</span>`}
+          <span style="font-size:11px;color:var(--txt3)">${dt}</span>
+          <i class="fa-solid fa-chevron-down" id="sch-${s.id}" style="color:var(--txt3);transition:transform .2s"></i>
+        </div>
+      </div>
+      <div class="sol-body" id="sol-${s.id}">
+        <div class="sol-dgrid">
+          <div class="full"><div class="dlabel">Short Description</div><div class="dval">${esc(s.desc||'—')}</div></div>
+          <div><div class="dlabel">Live Link / Demo</div><div class="dval">${s.link?`<a href="${esc(s.link)}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Link</a>`:'—'}</div></div>
+          <div><div class="dlabel">GitHub / Drive Link</div><div class="dval">${s.repo?`<a href="${esc(s.repo)}" target="_blank"><i class="fa-brands fa-github"></i> Open Repo</a>`:'—'}</div></div>
+          <div><div class="dlabel">Submitted</div><div class="dval">${dt} ${late?'⚠️ Late':'✅ On Time'}</div></div>
+          <div class="full"><div class="dlabel">How They Solved It</div><div class="dval" style="white-space:pre-wrap">${esc(s.approach||'—')}</div></div>
+          <div><div class="dlabel">Techniques Used</div><div class="dval">${esc(s.tech||'—')}</div></div>
+          <div><div class="dlabel">Tools &amp; Technologies</div><div class="dval">${esc(s.tools||'—')}</div></div>
+          <div class="full"><div class="dlabel">Challenges Faced</div><div class="dval" style="white-space:pre-wrap">${esc(s.challenges||'—')}</div></div>
+        </div>
+        <div class="fg" style="margin-top:14px">
+          <label class="fl">Note on This Solution</label>
+          <textarea class="fc" id="snote-${s.id}" rows="2" placeholder="Add a brief note about this solution..." onchange="saveSnote('${email}','${s.id}')">${esc(snote)}</textarea>
+        </div>
+        <div class="sol-actions">
+          <button class="btn btn-sm btn-secondary" onclick="dlSolPDF('${email}','${s.id}')"><i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> Download PDF</button>
+          ${s.link?`<a href="${esc(s.link)}" target="_blank" class="btn btn-sm btn-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>`:''}
+          ${s.repo?`<a href="${esc(s.repo)}" target="_blank" class="btn btn-sm btn-secondary"><i class="fa-brands fa-github"></i> Code / Files</a>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function togSol(id){
+  const b=document.getElementById('sol-'+id),ch=document.getElementById('sch-'+id);
+  const open=b.style.display!=='none';
+  b.style.display=open?'none':'block';ch.style.transform=open?'':'rotate(180deg)';
+}
+function savePstat(email){
+  const d=LS.pstat();
+  if(!d[email])d[email]={};
+  d[email].status=document.getElementById('pstat-sel').value;
+  d[email].judgeNotes=document.getElementById('pnotes').value;
+  LS.savePstat(d);toast('Saved.','success');
+}
+function saveSnote(email,sid){
+  const d=LS.pstat();
+  if(!d[email])d[email]={};if(!d[email].snotes)d[email].snotes={};
+  d[email].snotes[sid]=document.getElementById('snote-'+sid)?.value||'';
+  LS.savePstat(d);
+}
+
+// ========== PDF GENERATION ==========
+function buildSolPDF(email,sid,doc,startNew){
+  const {jsPDF}=window.jspdf;
+  const d=doc||(new jsPDF());
+  if(startNew&&doc)d.addPage();
+  const p=getProfile(email);
+  const s=LS.subs().find(x=>x.id===sid);
+  if(!s)return d;
+  const pstat=LS.pstat();
+  const jnote=pstat[email]?.snotes?.[sid]||'';
+  const jOvr=pstat[email]?.judgeNotes||'';
+  const late=new Date(s.at)>DEADLINE;
+  const dt=new Date(s.at).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});
+  const PW=d.internal.pageSize.getWidth();
+  let y=0;
+
+  // Header bar
+  d.setFillColor(13,20,36);d.rect(0,0,210,32,'F');
+  d.setFontSize(16);d.setFont('helvetica','bold');d.setTextColor(255,255,255);
+  d.text('BEXO CHALLENGERS ROUND 2',14,14);
+  d.setFontSize(9);d.setFont('helvetica','normal');d.setTextColor(148,163,184);
+  d.text('Submission Portal — Ace Digital',14,23);
+  d.setFontSize(9);d.setTextColor(200,210,240);
+  d.text(`Solution #${s.no} | ${p.name}`,PW-14,14,{align:'right'});
+  if(late){
+    d.setFillColor(239,68,68);d.roundedRect(PW-46,18,38,10,2,2,'F');
+    d.setFontSize(7);d.setFont('helvetica','bold');d.setTextColor(255,255,255);
+    d.text('LATE SUBMISSION',PW-27,25,{align:'center'});
+  }
+  y=46;
+
+  // Participant info
+  d.setFillColor(230,240,255);d.rect(14,y-5,182,8,'F');
+  d.setFontSize(9);d.setFont('helvetica','bold');d.setTextColor(37,99,235);d.text('PARTICIPANT INFORMATION',17,y);y+=8;
+  d.autoTable({startY:y,body:[['Name',p.name],['Email',p.email],['Phone',p.phone],['College',p.college],['Problem Statement',p.problem]],
+    styles:{fontSize:9,cellPadding:3},columnStyles:{0:{fontStyle:'bold',textColor:[59,125,248],cellWidth:48},1:{textColor:[30,30,50]}},
+    theme:'plain',margin:{left:14,right:14}});
+  y=d.lastAutoTable.finalY+10;
+
+  // Solution info
+  d.setFillColor(230,240,255);d.rect(14,y-5,182,8,'F');
+  d.setFontSize(9);d.setFont('helvetica','bold');d.setTextColor(37,99,235);d.text('SOLUTION DETAILS',17,y);y+=8;
+  d.autoTable({startY:y,body:[['Solution #',String(s.no)],['Title',s.title],['Submitted',dt+(late?' (LATE)':' (On Time)')],['Live Link',s.link||'—'],['GitHub/Drive',s.repo||'—'],['Techniques',s.tech||'—'],['Tools & Tech',s.tools||'—']],
+    styles:{fontSize:9,cellPadding:3},columnStyles:{0:{fontStyle:'bold',textColor:[59,125,248],cellWidth:48},1:{textColor:[30,30,50]}},
+    theme:'plain',margin:{left:14,right:14}});
+  y=d.lastAutoTable.finalY+10;
+
+  const addSection=(label,text)=>{
+    if(y>245){d.addPage();y=20;}
+    d.setFillColor(230,240,255);d.rect(14,y-5,182,8,'F');
+    d.setFontSize(9);d.setFont('helvetica','bold');d.setTextColor(37,99,235);d.text(label,17,y);y+=8;
+    d.setFontSize(9);d.setFont('helvetica','normal');d.setTextColor(50,60,80);
+    const lines=d.splitTextToSize(text||'—',182);d.text(lines,14,y);
+    y+=lines.length*4.5+6;
+  };
+  addSection('SHORT DESCRIPTION',s.desc);
+  addSection('HOW THEY SOLVED IT',s.approach);
+  addSection('CHALLENGES FACED',s.challenges);
+  if(y>235){d.addPage();y=20;}
+  d.setFillColor(230,240,255);d.rect(14,y-5,182,8,'F');
+  d.setFontSize(9);d.setFont('helvetica','bold');d.setTextColor(37,99,235);d.text('JUDGE REMARKS — THIS SOLUTION',17,y);y+=8;
+  if(jnote){const lines=d.splitTextToSize(jnote,182);d.setFontSize(9);d.setFont('helvetica','normal');d.setTextColor(50,60,80);d.text(lines,14,y);y+=lines.length*4.5+4;}
+  else{d.setDrawColor(200,210,230);d.rect(14,y,182,30);d.setFontSize(8);d.setTextColor(160,180,210);d.text('(Space for judge remarks)',18,y+10);y+=34;}
+  if(jOvr){
+    if(y>250){d.addPage();y=20;}
+    addSection('OVERALL JUDGE NOTES',jOvr);
+  }
+  // Footer
+  const pc=d.internal.getNumberOfPages();
+  for(let i=1;i<=pc;i++){
+    d.setPage(i);d.setFillColor(237,242,255);d.rect(0,284,210,13,'F');
+    d.setFontSize(7);d.setFont('helvetica','normal');d.setTextColor(100,130,180);
+    d.text(`BEXO Challengers Round 2 — ${p.name} — Solution #${s.no}`,14,291);
+    d.text(`Page ${i} of ${pc}`,196,291,{align:'right'});
+  }
+  return d;
+}
+
+function dlSolPDF(email,sid){
+  showLoad();
+  setTimeout(()=>{
+    try{
+      const d=buildSolPDF(email,sid,null,false);
+      const p=getProfile(email),s=LS.subs().find(x=>x.id===sid);
+      d.save(`BEXO_${p.name.replace(/ /g,'_')}_Sol${s.no}.pdf`);
+      toast('PDF downloaded!','success');
+    }catch(e){toast('PDF error. Try again.','error');console.error(e);}
+    hideLoad();
+  },100);
+}
+
+function dlPartPDF(){
+  const email=EMAILS[curPI];
+  const subs=LS.subs().filter(s=>s.pEmail===email).sort((a,b)=>a.no-b.no);
+  if(!subs.length){toast('No submissions to download.','info');return;}
+  showLoad();
+  setTimeout(()=>{
+    try{
+      const {jsPDF}=window.jspdf;
+      const p=getProfile(email);
+      const pstat=LS.pstat(),ps=pstat[email]||{};
+      const doc=new jsPDF();const PW=doc.internal.pageSize.getWidth();
+      // Cover
+      doc.setFillColor(10,15,30);doc.rect(0,0,210,297,'F');
+      doc.setFontSize(26);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
+      doc.text('BEXO',PW/2,85,{align:'center'});
+      doc.setFontSize(14);doc.setTextColor(148,163,184);doc.text('CHALLENGERS ROUND 2',PW/2,100,{align:'center'});
+      doc.setDrawColor(59,125,248);doc.setLineWidth(.4);doc.line(50,114,160,114);
+      doc.setFontSize(20);doc.setFont('helvetica','bold');doc.setTextColor(59,125,248);doc.text(p.name,PW/2,133,{align:'center'});
+      doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(148,163,184);
+      doc.text(p.college,PW/2,147,{align:'center',maxWidth:160});
+      doc.text(`${subs.length} Solution${subs.length!==1?'s':''} Submitted`,PW/2,162,{align:'center'});
+      if(ps.status&&ps.status!=='Pending'){doc.setTextColor(59,125,248);doc.text(`Status: ${ps.status}`,PW/2,177,{align:'center'});}
+      doc.setFontSize(8);doc.setTextColor(60,80,120);doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`,PW/2,278,{align:'center'});
+      // Solutions
+      subs.forEach((s,i)=>{doc.addPage();buildSolPDF(email,s.id,doc,false);});
+      // Global footer
+      const pc=doc.internal.getNumberOfPages();
+      for(let i=1;i<=pc;i++){
+        doc.setPage(i);doc.setFillColor(237,242,255);doc.rect(0,284,210,13,'F');
+        doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(100,130,180);
+        doc.text(`BEXO Challengers Round 2 — ${p.name} — All Solutions`,14,291);
+        doc.text(`Page ${i} of ${pc}`,196,291,{align:'right'});
+      }
+      doc.save(`BEXO_${p.name.replace(/ /g,'_')}_AllSolutions.pdf`);
+      toast('Full PDF downloaded!','success');
+    }catch(e){toast('PDF error.','error');console.error(e);}
+    hideLoad();
+  },100);
+}
+
+function dlAllPDF(){
+  showLoad();
+  setTimeout(()=>{
+    try{
+      const {jsPDF}=window.jspdf;
+      const subs=LS.subs();
+      const doc=new jsPDF();const PW=doc.internal.pageSize.getWidth();
+      // Cover
+      doc.setFillColor(10,15,30);doc.rect(0,0,210,297,'F');
+      doc.setFontSize(28);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
+      doc.text('BEXO CHALLENGERS',PW/2,80,{align:'center'});
+      doc.text('ROUND 2',PW/2,98,{align:'center'});
+      doc.setDrawColor(59,125,248);doc.setLineWidth(.4);doc.line(40,112,170,112);
+      doc.setFontSize(12);doc.setFont('helvetica','normal');doc.setTextColor(148,163,184);
+      doc.text('Complete Submissions Report — All Participants',PW/2,128,{align:'center'});
+      doc.setFontSize(12);doc.setTextColor(59,125,248);
+      doc.text(`${EMAILS.length} Participants | ${subs.length} Total Submissions`,PW/2,147,{align:'center'});
+      doc.setFontSize(9);doc.setTextColor(70,90,130);doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`,PW/2,215,{align:'center'});
+      EMAILS.forEach(email=>{
+        const p=getProfile(email);
+        const psubs=subs.filter(s=>s.pEmail===email).sort((a,b)=>a.no-b.no);
+        const ini=p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+        // Separator
+        doc.addPage();
+        doc.setFillColor(14,22,42);doc.rect(0,0,210,297,'F');
+        doc.setFontSize(38);doc.setFont('helvetica','bold');doc.setTextColor(59,125,248);doc.text(ini,PW/2,125,{align:'center'});
+        doc.setFontSize(20);doc.setTextColor(255,255,255);doc.text(p.name,PW/2,148,{align:'center'});
+        doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(148,163,184);
+        doc.text(p.college,PW/2,162,{align:'center',maxWidth:160});
+        doc.text(`${psubs.length} Solution${psubs.length!==1?'s':''}`,PW/2,177,{align:'center'});
+        if(!psubs.length){
+          doc.addPage();doc.setFontSize(13);doc.setTextColor(148,163,184);doc.text('No submissions from this participant.',PW/2,148,{align:'center'});
+        }else{
+          psubs.forEach(s=>{doc.addPage();buildSolPDF(email,s.id,doc,false);});
+        }
+      });
+      const pc=doc.internal.getNumberOfPages();
+      for(let i=1;i<=pc;i++){
+        doc.setPage(i);doc.setFillColor(237,242,255);doc.rect(0,284,210,13,'F');
+        doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(100,130,180);
+        doc.text('BEXO Challengers Round 2 — Complete Submissions Report',14,291);
+        doc.text(`Page ${i} of ${pc}`,196,291,{align:'right'});
+      }
+      doc.save('BEXO_Round2_AllSubmissions.pdf');
+      toast('All submissions PDF downloaded!','success');
+    }catch(e){toast('PDF error.','error');console.error(e);}
+    hideLoad();
+  },200);
+}
+
+// ========== CSV EXPORT ==========
+function exportCSV(){
+  const subs=LS.subs(),pstat=LS.pstat();
+  const rows=[['ID','Name','Email','Phone','College','Problem Statement','Status','Judge Notes','Sol No','Title','Description','Live Link','GitHub/Drive Link','Techniques','Tools','Approach','Challenges','Submitted At','Late']];
+  EMAILS.forEach(email=>{
+    const p=getProfile(email),ps=pstat[email]||{},esubs=subs.filter(s=>s.pEmail===email).sort((a,b)=>a.no-b.no);
+    if(!esubs.length){rows.push([PDATA[email].id,p.name,p.email,p.phone,p.college,p.problem,ps.status||'Pending',ps.judgeNotes||'','','','','','','','','','','','']);}
+    else esubs.forEach(s=>{
+      const late=new Date(s.at)>DEADLINE;
+      rows.push([PDATA[email].id,p.name,p.email,p.phone,p.college,p.problem,ps.status||'Pending',ps.judgeNotes||'',s.no,s.title,s.desc||'',s.link||'',s.repo||'',s.tech||'',s.tools||'',s.approach||'',s.challenges||'',new Date(s.at).toLocaleString('en-IN'),late?'Yes':'No']);
+    });
+  });
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const b=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='BEXO_Round2_Submissions.csv';a.click();
+  toast('CSV exported!','success');
+}
+
+// ========== UTILS ==========
+function togglePw(id,btn){
+  const inp=document.getElementById(id),ic=btn.querySelector('i');
+  inp.type=inp.type==='password'?'text':'password';
+  ic.className=inp.type==='text'?'fa-solid fa-eye-slash':'fa-solid fa-eye';
+}
+function wc(ta,cid){
+  const w=ta.value.trim()?ta.value.trim().split(/\s+/).length:0;
+  const el=document.getElementById(cid);if(el){el.textContent=`${w} word${w!==1?'s':''}`;el.style.color=w>120?'var(--amber)':'var(--txt3)';}
+}
+function toast(msg,type='info'){
+  const c=document.getElementById('toast-wrap');
+  const icons={success:'fa-circle-check',error:'fa-circle-xmark',info:'fa-circle-info'};
+  const t=document.createElement('div');t.className=`toast t-${type}`;
+  t.innerHTML=`<i class="fa-solid ${icons[type]}"></i><span>${msg}</span>`;
+  c.appendChild(t);setTimeout(()=>{t.style.animation='sOut .3s ease forwards';setTimeout(()=>t.remove(),300);},3000);
+}
+function showLoad(){document.getElementById('loading').style.display='flex';}
+function hideLoad(){document.getElementById('loading').style.display='none';}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ========== KEYBOARD ==========
+['l-email','l-pass'].forEach(id=>{document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});});
+
+// ========== TEST FILL ==========
+function fillTest(){
+  document.getElementById('l-email').value='test@bexo.com';
+  document.getElementById('l-pass').value='test@123';
+  toast('Test credentials filled! Click Sign In.','info');
+}
+</script>
+</body>
+</html>
