@@ -593,7 +593,7 @@ select.fc{background-color:#fff}select.fc option{background:#fff;color:#111827}
 <div class="pcontent-wide">
   <div class="summary-grid" id="sum-grid"></div>
   <div class="dl-banner">
-    <div><div class="dl-label"><i class="fa-solid fa-clock"></i> Submission Deadline</div><div class="dl-date">16 October 2026 &bull; 12:00 PM</div></div>
+    <div><div class="dl-label"><i class="fa-solid fa-clock"></i> Submission Deadline</div><div class="dl-date">17 October 2026 &bull; 11:59 PM</div></div>
     <div class="cd">
       <div class="cd-item"><span class="cd-val" id="cd-d">--</span><span class="cd-lbl">Days</span></div>
       <div class="cd-item"><span class="cd-val" id="cd-h">--</span><span class="cd-lbl">Hours</span></div>
@@ -604,6 +604,7 @@ select.fc{background-color:#fff}select.fc option{background:#fff;color:#111827}
   <div class="atbar">
     <div><h2>Participants <span id="pc-label" style="font-size:13px;font-weight:400;color:var(--txt3)"></span></h2></div>
     <div class="atbar-r">
+      <button class="btn btn-secondary btn-sm" onclick="loadDash()"><i class="fa-solid fa-rotate"></i> Refresh</button>
       <button class="toggle" id="pend-btn" onclick="togglePending()"><i class="fa-solid fa-filter"></i> Pending Only</button>
       <button class="btn btn-secondary btn-sm" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> CSV</button>
       <button class="btn btn-secondary btn-sm" onclick="dlAllPDF()"><i class="fa-solid fa-file-pdf" style="color:var(--red)"></i> All PDF</button>
@@ -643,7 +644,7 @@ select.fc{background-color:#fff}select.fc option{background:#fff;color:#111827}
 
 <script>
 // ========== CONFIG ==========
-const DEADLINE = new Date('2026-10-16T12:00:00');
+const DEADLINE = new Date('2026-10-17T23:59:00');
 
 const ADMIN = { email:'Admin@Acedigital.cc', password:'admin@1727' };
 
@@ -659,35 +660,73 @@ const PDATA = {
 };
 const EMAILS = Object.keys(PDATA).filter(e=>e!=='test@bexo.com');
 const ALL_EMAILS = Object.keys(PDATA);
-// Pre-seed test account password
-(function(){const pw=JSON.parse(localStorage.getItem('bexo_pw')||'{}');if(!pw['test@bexo.com']){pw['test@bexo.com']='test@123';localStorage.setItem('bexo_pw',JSON.stringify(pw));}}());
-
 // ========== STATE ==========
 let CU = null, isAdmin = false, curPI = 0, pendOnly = false, cdInt = null;
 
-// ========== STORAGE ==========
+// ========== STORAGE (Supabase) ==========
+// >>> PASTE YOUR SUPABASE DETAILS HERE (Project Settings > API) <<<
+const SB_URL = 'https://amieibqmfevvvhqotkzq.supabase.co';        // e.g. https://abcdxyz.supabase.co
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtaWVpYnFtZmV2dnZocW90a3pxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNjY1OTYsImV4cCI6MjEwNzc0MjU5Nn0.kuLSXru4GUmnVvUbBTz6F1y6YNcSAl1Xxpt-4o5TSDE';   // the "anon public" key (NOT service_role)
+
+const DB = { subs:[], prof:{}, pstat:{}, pw:{} };   // in-memory cache of server data
+
+async function sb(path, opts={}){
+  if(SB_URL.startsWith('PASTE')||SB_KEY.startsWith('PASTE')) throw new Error('Supabase is not configured');
+  const auth = SB_KEY.startsWith('eyJ') ? {Authorization:'Bearer '+SB_KEY} : {};   // legacy anon key = JWT; new publishable key = apikey header only
+  const r = await fetch(SB_URL+'/rest/v1/'+path, {...opts, headers:{
+    apikey:SB_KEY, ...auth, 'Content-Type':'application/json', ...(opts.headers||{})
+  }});
+  if(!r.ok) throw new Error(await r.text());
+  const t = await r.text();
+  return t ? JSON.parse(t) : null;
+}
+function sbUpsert(table, rows, conflict){
+  return sb(table+'?on_conflict='+conflict, {method:'POST', headers:{Prefer:'resolution=merge-duplicates,return=minimal'}, body:JSON.stringify(rows)});
+}
+async function hashPw(pw){
+  try{
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('bexo-r2:'+pw));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }catch(e){ return 'plain:'+pw; }
+}
+// Admin: load everything
+async function refreshAll(){
+  const [s,pr,ps] = await Promise.all([
+    sb('submissions?select=data&order=created_at.asc'),
+    sb('profiles?select=email,data'),
+    sb('pstat?select=email,data')
+  ]);
+  DB.subs = s.map(r=>r.data);
+  DB.prof = {}; pr.forEach(r=>DB.prof[r.email]=r.data);
+  DB.pstat = {}; ps.forEach(r=>DB.pstat[r.email]=r.data);
+}
+// Participant: load only their own data
+async function refreshUser(email){
+  const e = encodeURIComponent(email);
+  const [s,pr] = await Promise.all([
+    sb('submissions?p_email=eq.'+e+'&select=data&order=created_at.asc'),
+    sb('profiles?email=eq.'+e+'&select=email,data')
+  ]);
+  DB.subs = s.map(r=>r.data);
+  DB.prof = {}; pr.forEach(r=>DB.prof[r.email]=r.data);
+}
+function saveSub(sub){ return sbUpsert('submissions',[{id:sub.id,p_email:sub.pEmail,data:sub}],'id'); }
+function pstatSave(email){ return sbUpsert('pstat',[{email,data:DB.pstat[email]}],'email'); }
+
 const LS = {
-  get: k => JSON.parse(localStorage.getItem(k)||'null'),
-  set: (k,v) => localStorage.setItem(k,JSON.stringify(v)),
-  pw: () => LS.get('bexo_pw')||{},
-  savePw: d => LS.set('bexo_pw',d),
-  prof: () => LS.get('bexo_prof')||{},
-  saveProf: d => LS.set('bexo_prof',d),
-  subs: () => LS.get('bexo_subs')||[],
-  saveSubs: d => LS.set('bexo_subs',d),
-  pstat: () => LS.get('bexo_pstat')||{},
-  savePstat: d => LS.set('bexo_pstat',d)
+  subs: () => DB.subs,
+  pstat: () => DB.pstat
 };
 
 function getProfile(email){
-  const p=LS.prof();
-  return p[email]||PDATA[email]||null;
+  return DB.prof[email]||PDATA[email]||null;
 }
 function saveProfile(email,data){
-  const p=LS.prof();p[email]=data;LS.saveProf(p);
+  DB.prof[email]=data;
+  return sbUpsert('profiles',[{email,data}],'email');
 }
 function getSubs(email){
-  return LS.subs().filter(s=>s.pEmail===email);
+  return DB.subs.filter(s=>s.pEmail===email);
 }
 
 // ========== PAGES ==========
@@ -698,7 +737,7 @@ function showPage(id){
 }
 
 // ========== AUTH ==========
-function doLogin(){
+async function doLogin(){
   const email=document.getElementById('l-email').value.trim();
   const pass=document.getElementById('l-pass').value;
   const errEl=document.getElementById('l-err');
@@ -706,25 +745,34 @@ function doLogin(){
   if(!email||!pass){errEl.textContent='Please enter both email and password.';errEl.style.display='block';return;}
 
   if(email.toLowerCase()===ADMIN.email.toLowerCase()){
-    if(pass===ADMIN.password){CU=email;isAdmin=true;loadDash();showPage('admin-dashboard');toast('Welcome, Admin!','success');}
+    if(pass===ADMIN.password){CU=email;isAdmin=true;await loadDash();showPage('admin-dashboard');toast('Welcome, Admin!','success');}
     else{errEl.textContent='Incorrect admin password.';errEl.style.display='block';}
     return;
   }
   // Special case: test account always works
   if(email.toLowerCase()==='test@bexo.com'){
-    if(pass==='test@123'){CU='test@bexo.com';isAdmin=false;loadProfile();showPage('profile');toast('Welcome, Test User!','success');}
+    if(pass==='test@123'){showLoad();try{await refreshUser('test@bexo.com');}catch(e){console.error(e);}hideLoad();CU='test@bexo.com';isAdmin=false;loadProfile();showPage('profile');toast('Welcome, Test User!','success');}
     else{errEl.textContent='Incorrect password for test account. Use: test@123';errEl.style.display='block';}
     return;
   }
   const me=ALL_EMAILS.find(e=>e.toLowerCase()===email.toLowerCase());
   if(!me){errEl.textContent='This email is not authorized. Only Round 2 participants can log in.';errEl.style.display='block';return;}
-  const pws=LS.pw();
-  if(pws[me]){
-    if(pws[me]!==pass){errEl.textContent='Incorrect password. Please try again.';errEl.style.display='block';return;}
-  }else{
-    pws[me]=pass;LS.savePw(pws);
-    toast('Password set! Welcome to BEXO Round 2.','success');
+  showLoad();
+  try{
+    const h=await hashPw(pass);
+    const rows=await sb('passwords?email=eq.'+encodeURIComponent(me)+'&select=hash');
+    if(rows.length){
+      if(rows[0].hash!==h){hideLoad();errEl.textContent='Incorrect password. Please try again.';errEl.style.display='block';return;}
+    }else{
+      await sbUpsert('passwords',[{email:me,hash:h}],'email');
+      toast('Password set! Welcome to BEXO Round 2.','success');
+    }
+    await refreshUser(me);
+  }catch(e){
+    hideLoad();console.error(e);
+    errEl.textContent='Connection problem. Please check your internet and try again.';errEl.style.display='block';return;
   }
+  hideLoad();
   CU=me;isAdmin=false;loadProfile();showPage('profile');
 }
 
@@ -751,17 +799,24 @@ function loadProfile(){
   document.getElementById('pr-avatar').textContent=p.name.charAt(0).toUpperCase();
 }
 
-function confirmProfile(){
+async function confirmProfile(){
   const name=document.getElementById('pr-name').value.trim();
   const phone=document.getElementById('pr-phone').value.trim();
   const college=document.getElementById('pr-college').value.trim();
   const problem=document.getElementById('pr-problem').value.trim();
   if(!name||!phone||!college||!problem){toast('Please fill in all required fields.','error');return;}
-  saveProfile(CU,{...PDATA[CU],name,phone,college,problem});
+  try{showLoad();await saveProfile(CU,{...PDATA[CU],name,phone,college,problem});}catch(e){hideLoad();console.error(e);toast('Could not save profile. Try again.','error');return;}
+  hideLoad();
   loadSubsPage();showPage('submissions');toast('Profile confirmed! Now submit your solution.','success');
 }
 
 // ========== SUBMISSIONS ==========
+async function submitSol(){
+  showLoad();
+  try{ await submitSolInner(); }
+  catch(e){ console.error(e); toast('Could not save your submission. Check your internet and press Submit again.','error'); }
+  hideLoad();
+}
 function loadSubsPage(){
   const p=getProfile(CU);
   document.getElementById('sub-info').textContent=`${p.name} • ${p.college} • ${p.problem}`;
@@ -770,9 +825,9 @@ function loadSubsPage(){
   document.getElementById('s-title').value=`${p.problem} — Solution #${n}`;
   const now=new Date(),late=now>DEADLINE;
   document.getElementById('sub-dl-notice').innerHTML=late
-    ?`<div style="padding:11px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:7px;font-size:13px;color:var(--red)"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Deadline Passed:</strong> Submissions after 16 Oct 2026, 12:00 PM will be marked as <strong>Late</strong>.</div>`
-    :`<div style="padding:11px 14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:7px;font-size:13px;color:var(--green)"><i class="fa-solid fa-clock"></i> <strong>Deadline:</strong> 16 October 2026, 12:00 PM — Submissions are open.</div>`;
-  document.getElementById('sub-dl-badge').textContent=late?'⚠ Deadline Passed':'📅 Deadline: 16 Oct 2026 12PM';
+    ?`<div style="padding:11px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:7px;font-size:13px;color:var(--red)"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Deadline Passed:</strong> Submissions after 17 Oct 2026, 11:59 PM will be marked as <strong>Late</strong>.</div>`
+    :`<div style="padding:11px 14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:7px;font-size:13px;color:var(--green)"><i class="fa-solid fa-clock"></i> <strong>Deadline:</strong> 17 October 2026, 11:59 PM — Submissions are open.</div>`;
+  document.getElementById('sub-dl-badge').textContent=late?'⚠ Deadline Passed':'📅 Deadline: 17 Oct 2026 11:59PM';
   renderSubs();
 }
 
@@ -834,10 +889,14 @@ function editSub(id){
   wc(document.getElementById('s-desc'),'s-wc');
   scrollToForm();
 }
-function delSub(id){
+async function delSub(id){
   if(!confirm('Delete this submission?'))return;
-  LS.saveSubs(LS.subs().filter(s=>s.id!==id));
-  renderSubs();toast('Submission deleted.','info');
+  try{
+    showLoad();
+    await sb('submissions?id=eq.'+encodeURIComponent(id),{method:'DELETE'});
+    DB.subs=DB.subs.filter(s=>s.id!==id);
+    hideLoad();renderSubs();toast('Submission deleted.','info');
+  }catch(e){hideLoad();console.error(e);toast('Could not delete. Try again.','error');}
 }
 function scrollToForm(){document.getElementById('sub-form').scrollIntoView({behavior:'smooth',block:'start'});}
 function clearForm(){
@@ -850,7 +909,7 @@ function clearForm(){
   document.getElementById('s-decl').checked=false;
   wc(document.getElementById('s-desc'),'s-wc');
 }
-function submitSol(){
+async function submitSolInner(){
   const title=document.getElementById('s-title').value.trim();
   const desc=document.getElementById('s-desc').value.trim();
   const link=document.getElementById('s-link').value.trim();
@@ -869,11 +928,12 @@ function submitSol(){
   if(editId){
     const i=subs.findIndex(s=>s.id===editId);
     if(i!==-1)subs[i]={...subs[i],title,desc,link,repo,approach,tech,tools,challenges,decl,updAt:new Date().toISOString()};
-    LS.saveSubs(subs);toast('Submission updated!','success');clearForm();renderSubs();
+    if(i!==-1)await saveSub(subs[i]);
+    toast('Submission updated!','success');clearForm();renderSubs();
   }else{
     const no=getSubs(CU).length+1;
     const ns={id:'s_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),pEmail:CU,no,title,desc,link,repo,approach,tech,tools,challenges,decl,at:new Date().toISOString()};
-    subs.push(ns);LS.saveSubs(subs);
+    await saveSub(ns);subs.push(ns);
     document.getElementById('suc-msg').innerHTML=`<strong>Solution #${no}: "${title}"</strong> has been submitted for BEXO Challengers Round 2. Keep it up! 🚀`;
     showPage('success');
   }
@@ -882,7 +942,10 @@ function goSubs(){loadSubsPage();showPage('submissions');}
 function addMore(){clearForm();loadSubsPage();showPage('submissions');setTimeout(scrollToForm,300);}
 
 // ========== ADMIN DASHBOARD ==========
-function loadDash(){
+async function loadDash(quiet){
+  if(!quiet)showLoad();
+  try{await refreshAll();}catch(e){console.error(e);toast('Could not load data. Check connection / Supabase setup.','error');}
+  if(!quiet)hideLoad();
   const subs=LS.subs(),pstat=LS.pstat();
   const total=EMAILS.length,tsubs=subs.length;
   const reviewed=EMAILS.filter(e=>pstat[e]?.status==='Reviewed').length;
@@ -945,7 +1008,7 @@ function startCD(){
   }
   upd();cdInt=setInterval(upd,1000);
 }
-function goDash(){loadDash();showPage('admin-dashboard');}
+async function goDash(){await loadDash();showPage('admin-dashboard');}
 
 // ========== ADMIN PARTICIPANT DETAIL ==========
 function openPDetail(email){
@@ -1032,13 +1095,13 @@ function savePstat(email){
   if(!d[email])d[email]={};
   d[email].status=document.getElementById('pstat-sel').value;
   d[email].judgeNotes=document.getElementById('pnotes').value;
-  LS.savePstat(d);toast('Saved.','success');
+  pstatSave(email).then(()=>toast('Saved.','success')).catch(e=>{console.error(e);toast('Save failed. Try again.','error');});
 }
 function saveSnote(email,sid){
   const d=LS.pstat();
   if(!d[email])d[email]={};if(!d[email].snotes)d[email].snotes={};
   d[email].snotes[sid]=document.getElementById('snote-'+sid)?.value||'';
-  LS.savePstat(d);
+  pstatSave(email).catch(e=>{console.error(e);toast('Note save failed. Try again.','error');});
 }
 
 // ========== PDF GENERATION ==========
@@ -1260,6 +1323,12 @@ function toast(msg,type='info'){
 function showLoad(){document.getElementById('loading').style.display='flex';}
 function hideLoad(){document.getElementById('loading').style.display='none';}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ========== AUTO REFRESH (admin dashboard) ==========
+setInterval(()=>{
+  const pg=document.getElementById('page-admin-dashboard');
+  if(isAdmin&&pg&&pg.classList.contains('active'))loadDash(true);
+},60000);
 
 // ========== KEYBOARD ==========
 ['l-email','l-pass'].forEach(id=>{document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});});
